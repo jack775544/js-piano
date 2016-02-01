@@ -1,4 +1,6 @@
-var init = function () {
+var main = function () {
+    var labelState = true; // false is hidden, true is shown
+    var pitches;
     var piano = new Wad({
         source: 'square',
         env: {
@@ -18,7 +20,8 @@ var init = function () {
             }
         }
     })
-    jQuery.ajax('js/pitch.json').done(function(pitches){
+    jQuery.ajax('js/pitch.json').done(function(pitchArray){
+        pitches = pitchArray;
         $(pitches).each(function () {
             var note = this;
             var keyclass;
@@ -29,7 +32,7 @@ var init = function () {
             } else {
                 keyclass = 'red key';
             }
-            var btn = $('<button id="' + this.note + '" class="'+keyclass+'">' + this.note + '</button>').appendTo($('body'));
+            var btn = $('<button id="' + this.note + '" class="'+keyclass+'">' + this.note + '</button>').appendTo($('#piano'));
             $(btn).click(function(){
                 playNote = note.pitch;
                 console.log(playNote);
@@ -39,10 +42,20 @@ var init = function () {
             })
         });
     });
-    piano.play({
-        pitch: 5000
+    $('#labelDisplay').click(function(){
+        $('.key').each(function(num, btn){
+            if (labelState == false){
+                var btnClass = btn.getAttribute('class');
+                if (btnClass.indexOf('red') < 0){
+                    $(btn).css('font-size', '10px');
+                }
+            } else {
+                $(btn).css('font-size', '0px');
+            }
+        })
+        labelState = !labelState;
     })
 }
 $(document).ready(function () {
-    init();
+    main();
 })
