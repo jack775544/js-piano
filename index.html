@@ -1,20 +1,15 @@
-<html>
+---
+layout: piano
+---
 
-<head>
-    <title>Testing</title>
-    
-    <link rel="stylesheet" href="css/style.css">
-    
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="js/wad.min.js"></script>
-    <script src="js/music.js"></script>
-</head>
-
-<body>
-    <div id="piano"></div>
-    <div id="buttonBox">
-        <button id="labelDisplay">Toggle Key Labels</button>
-    </div>
-</body>
-
-</html>
+{% for n in site.data.pitch %}
+    {% capture key_size %}{{ n.note | size }}{% endcapture %}
+    {% if key_size == '1' %}
+        {% assign key_class = 'white key' %}
+    {% elsif key_size == '2' %}
+        {% assign key_class = 'black key' %}
+    {% else %}
+        {% assign key_class = 'red key' %}
+    {% endif %}
+    <button id="{{ n.note }}" class="{{ key_class }}" onclick="playNote({{ n.pitch }})">{{ n.note }}</button>
+{% endfor %}

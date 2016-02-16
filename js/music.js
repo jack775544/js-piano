@@ -1,7 +1,12 @@
+var piano;
+var pitches;
+var playback;
+var musicArray = new Array;
+var musicCount = 0;
+var playNote;
 var main = function () {
     var labelState = true; // false is hidden, true is shown
-    var pitches;
-    var piano = new Wad({
+    piano = new Wad({
         source: 'square',
         env: {
             attack: .01,
@@ -20,33 +25,11 @@ var main = function () {
             }
         }
     })
-    jQuery.ajax('js/pitch.json').done(function(pitchArray){
-        pitches = pitchArray;
-        $(pitches).each(function () {
-            var note = this;
-            var keyclass;
-            if (this.note.length == 1){
-                keyclass = 'white key';
-            } else if (this.note.length == 2){
-                keyclass = 'black key';
-            } else {
-                keyclass = 'red key';
-            }
-            var btn = $('<button id="' + this.note + '" class="'+keyclass+'">' + this.note + '</button>').appendTo($('#piano'));
-            $(btn).click(function(){
-                playNote = note.pitch;
-                console.log(playNote);
-                piano.play({
-                    pitch: playNote
-                })
-            })
-        });
-    });
-    $('#labelDisplay').click(function(){
-        $('.key').each(function(num, btn){
-            if (labelState == false){
+    $('#labelDisplay').click(function () {
+        $('.key').each(function (num, btn) {
+            if (labelState == false) {
                 var btnClass = btn.getAttribute('class');
-                if (btnClass.indexOf('red') < 0){
+                if (btnClass.indexOf('red') < 0) {
                     $(btn).css('font-size', '10px');
                 }
             } else {
@@ -55,7 +38,14 @@ var main = function () {
         })
         labelState = !labelState;
     })
+
+    playNote = function(number) {
+        console.log('Played: ' + number);
+        piano.play({
+            pitch: number
+        });
+    }
 }
 $(document).ready(function () {
     main();
-})
+});
